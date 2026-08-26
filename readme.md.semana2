@@ -1,0 +1,224 @@
+Modelagem Funcional de uma Porta Automática
+ 
+1. Sobre o projeto
+ 
+Este projeto foi desenvolvido como parte da atividade da disciplina de Sistemas Automatizados.
+ 
+A proposta foi modelar o funcionamento de uma porta automática de acesso a um edifício, considerando tanto o funcionamento normal quanto algumas situações que podem ocorrer durante a operação.
+ 
+O modelo foi desenvolvido pensando principalmente na relação entre:
+ 
+Entradas → Processamento → Decisões → Saídas → Realimentação
+ 
+Também foram consideradas perturbações, falhas e respostas seguras.
+ 
+---
+ 
+2. Objetivo
+ 
+O objetivo da atividade foi desenvolver um modelo funcional de uma porta automática, identificando:
+ 
+- entradas do sistema;
+- processamento das informações;
+- decisões;
+- saídas;
+- realimentação;
+- perturbações;
+- falhas;
+- comportamento seguro.
+ 
+A ideia foi representar como a porta recebe informações dos sensores, verifica as condições necessárias, realiza os comandos de abertura e fechamento e acompanha o resultado das ações.
+ 
+
+ 
+3. Funcionamento básico
+ 
+O funcionamento principal considerado no modelo é:
+ 
+**Presença detectada
+→ Validar presença
+→ Verificar autorização
+→ Verificar permissivos
+→ Comandar abertura
+→ Monitorar porta
+→ Verificar área
+→ Aguardar tempo
+→ Validar sensores
+→ Comandar fechamento
+→ Confirmar porta fechada
+ 
+Durante esse processo existem decisões que podem mudar o caminho do sistema.
+ 
+Por exemplo, se a autorização não for válida, o acesso é rejeitado.
+ 
+Se a área estiver ocupada, a porta permanece aberta.
+ 
+Se um obstáculo for detectado durante o fechamento, o movimento é interrompido e a porta é reaberta.
+ 
+---
+ 
+4. Classificação do sistema
+ 
+O sistema foi classificado neste trabalho como um sistema automatizado de controle com realimentação
+ 
+Essa classificação foi escolhida porque o sistema:
+ 
+- recebe informações de sensores;
+- processa essas informações;
+- toma decisões;
+- envia comandos para um atuador;
+- verifica o resultado das ações;
+- utiliza informações de retorno para continuar ou interromper o funcionamento.
+ 
+Entradas
+ 
+- Presença;
+- Autorização;
+- Emergência;
+- Alimentação;
+- Obstáculo;
+- Estado da porta;
+- Resposta do atuador.
+ 
+ Processamento
+ 
+- Validação dos sinais;
+- Verificação de autorização;
+- Verificação de permissivos;
+- Controle da abertura;
+- Monitoramento;
+- Temporização;
+- Controle do fechamento;
+- Tratamento de falhas.
+ 
+ Saídas
+ 
+- Comando para abrir;
+- Comando para fechar;
+- Comando para parar;
+- Comando para reabrir;
+- Indicação de porta aberta;
+- Indicação de porta fechada;
+- Alarme;
+- Estado seguro.
+ 
+---
+ 
+ 5. Realimentação
+ 
+A realimentação foi utilizada para que o sistema possa verificar se o resultado esperado realmente aconteceu.
+ 
+Um exemplo é:
+ 
+Comando de abertura
+→ Motor
+→ Movimento da porta
+→ Sensor de posição
+→ Estado da porta
+→ Lógica de controle
+ 
+Dessa forma, o sistema não depende somente do comando enviado, mas também verifica o resultado.
+ 
+A mesma lógica é utilizada para acompanhar o fechamento e verificar possíveis problemas no atuador.
+ 
+---
+ 
+6. Perturbação
+ 
+A principal perturbação considerada foi um obstáculo na área de passagem.
+ 
+Caso um obstáculo seja detectado durante o fechamento:
+ 
+Obstáculo detectado
+→ Parar fechamento
+→ Reabrir porta
+→ Monitorar área
+→ Reavaliar fechamento
+ 
+O obstáculo é considerado uma perturbação porque é uma condição externa que interfere no funcionamento normal do sistema.
+ 
+---
+ 
+7. Análise de falhas
+ 
+Foram analisadas algumas falhas que podem alterar o funcionamento da porta.
+ 
+| Falha | Possível efeito | Como detectar | Resposta segura |
+|---|---|---|---|
+| Sensor travado | Decisão incorreta | Incoerência temporal | Bloquear atuação automática |
+| Sensor inválido | Informação não confiável | Validação do sinal | Impedir fechamento |
+| Perda de energia | Parada do sistema | Ausência de alimentação | Estado mecânico seguro |
+| Comando indevido | Ação não desejada | Verificação dos permissivos | Rejeitar comando |
+| Atuador não responde | Movimento não ocorre | Realimentação | Parar e alarmar |
+| Obstáculo | Risco durante fechamento | Sensor de obstáculo | Parar e reabrir |
+| Perda de realimentação | Estado da porta desconhecido | Ausência de retorno | Interromper e sinalizar |
+| Emergência | Operação normal pode não ser adequada | Comando de emergência | Adotar estado seguro |
+ 
+---
+ 
+8. Comportamento seguro
+ 
+O princípio utilizado no modelo foi que, quando uma condição necessária para uma ação segura não puder ser confirmada, o sistema deve evitar ou interromper essa ação.
+ 
+Alguns exemplos:
+ 
+- Obstáculo → parar e reabrir;
+- Sensor inválido → impedir fechamento;
+- Sensor travado → bloquear atuação automática;
+- Atuador sem resposta → parar e alarmar;
+- Emergência → adotar estado seguro;
+- Perda de energia → assumir o estado mecânico seguro;
+- Comando indevido → rejeitar.
+ 
+O objetivo é evitar que uma informação incorreta ou uma condição desconhecida provoque uma ação potencialmente perigosa.
+ 
+---
+ 
+9. Cenários considerados
+ 
+Foram considerados os seguintes cenários:
+ 
+1. Aproximação válida → abrir porta;
+2. Acesso não autorizado → rejeitar acesso;
+3. Passagem concluída → fechar após espera;
+4. Área ocupada → manter porta aberta;
+5. Obstáculo durante fechamento → parar e reabrir;
+6. Falha de sensor → impedir fechamento;
+7. Emergência → estado seguro;
+8. Perda de energia → estado seguro;
+9. Comando indevido → rejeitar comando;
+10. Atuador sem resposta → parar e alarmar;
+11. Perda de realimentação → interromper e sinalizar;
+12. Recuperação → revalidar condições antes de retomar.
+ 
+---
+ 
+10. Evidências
+ 
+Este repositório contém:
+ 
+- documentação da atividade em Word;
+- diagrama funcional editável;
+- imagem do diagrama;
+- README com objetivo, classificação e análise de falhas.
+ 
+Arquivos
+ 
+Documentação:
+`Documentacao/Relatorio_Porta_Automatica.docx`
+ 
+Diagrama editável:  
+`Diagrama/Porta_Automatica.drawio`
+ 
+Diagrama em imagem:
+`Diagrama/Porta_Automatica.png`
+ 
+---
+ 
+11. Conclusão
+ 
+A atividade permitiu entender melhor como um sistema automatizado pode ser representado através de entradas, processamento, decisões e saídas.
+ 
+Também foi possível perceber que, mesmo em um sistema aparentemente simples como uma porta automática, é necessário considerar situações diferentes do funcionamento normal.
+ 
+A inclusão da realimentação, das falhas, das perturbações e do comportamento seguro tornou o modelo mais completo e permitiu analisar como o sistema deve reagir quando as condições esperadas não são atendidas.
