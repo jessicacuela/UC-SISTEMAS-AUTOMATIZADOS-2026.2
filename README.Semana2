@@ -1,0 +1,101 @@
+Projeto Arduino - Monitoramento de Entradas Digitais e Analógicas
+1. Objetivo
+Este projeto tem como objetivo desenvolver e testar um protótipo utilizando o Arduino Uno, integrando uma entrada digital (botão), uma saída digital (LED), uma entrada analógica (potenciômetro) e um sensor de temperatura DHT22.
+O projeto realiza a leitura dos componentes, apresenta os valores no Monitor Serial e classifica as condições do sistema como NORMAL, ATENÇÃO, ALARME ou FALHA DE SENSOR.
+
+2. Componentes utilizados
+•	Arduino Uno
+•	Botão (Pushbutton)
+•	LED
+•	Resistor para o LED
+•	Potenciômetro
+•	Sensor de temperatura DHT22
+•	Monitor Serial do Wokwi
+
+3. Ligações dos componentes
+COMPONENTE	PINO NO ARDUINO	FUNÇÃO
+Botão	D2	Entrada Digital
+DHT22	D4	Leitura de temperatura
+LED	D8	Saída digital
+Potenciômetro	A0	Entrada analógica
+DHT22 VCC	5V	Alimentação
+DHT22 GND	GND	Terra
+Potenciômetro	5V/GND	Alimentação
+		
+
+O botão utiliza o resistor interno INPUT_PULLUP. Dessa forma, quando está liberado, a entrada permanece em HIGH e, quando pressionado, passa para LOW.
+
+4. Funcionamento do botão e LED
+O botão está conectado ao pino D2 e controla o LED conectado ao pino D8.
+•	Botão liberado → LED apagado.
+•	Botão pressionado → LED aceso.
+•	Botão mantido pressionado → LED permanece aceso.
+
+Casos de teste digitais
+Caso	Entrada observada	Saída esperada	Resultado
+D1	Botão liberado / HIGH	LED apagado	Aprovado
+D2	Botão pressionado/LOW	LED aceso	Aprovado
+D3	Cinco acionamentos	Cinco respostas do LED	Aprovado
+D4	Botão mantido pressionado	LED permanece aceso	Aprovado
+
+
+5. Funcionamento do potenciômetro
+O potenciômetro está conectado à entrada analógica A0.
+Os terminais laterais são conectados a 5V e GND, enquanto o terminal central é conectado ao A0.
+A leitura é realizada através de:
+analogRead(A0)
+O Arduino fornece valores entre aproximadamente 0 e 1023, de acordo com a posição do potenciômetro.
+Faixa	Classificação
+0-399	NORMAL
+400-749	ATENÇÃO
+750-1023	ALARME
+
+Foram realizados testes nas posições mínima, aproximadamente central e máxima do potenciômetro.
+
+
+6. Funcionamento do DHT22
+O DHT22 foi utilizado para realizar a leitura da temperatura.
+O sensor foi conectado da seguinte forma:
+•	VCC → 5V
+•	GND → GND
+•	DATA → D4
+A biblioteca utilizada permite inicializar o sensor e realizar a leitura da temperatura através de readTemperature().
+Os valores de temperatura são apresentados no Monitor Serial.
+Também foi realizada a alteração da temperatura simulada no Wokwi para verificar a resposta do sistema.
+
+7. Classificação da temperatura
+A temperatura também participa da classificação do sistema.
+Temperatura	Classificação
+Abaixo de 30°C	NORMAL
+30°C até abauxi de 40°C	ATENÇÃO
+40° C ou superior	ALARME
+
+Caso o DHT22 não consiga fornecer uma leitura válida, o sistema informa:
+FALHA DE SENSOR
+
+
+8. Decisão integrada
+O sistema combina as leituras do potenciômetro e do DHT22.
+A classificação segue a seguinte lógica:
+1.	Se o DHT22 apresentar uma leitura inválida → FALHA DE SENSOR.
+2.	Se a temperatura for ≥ 40 °C ou o potenciômetro for ≥ 750 → ALARME.
+3.	Se a temperatura for ≥ 30 °C ou o potenciômetro estiver entre 400 e 749 → ATENÇÃO.
+4.	Caso nenhuma dessas condições ocorra → NORMAL.
+O botão possui funcionamento independente e controla o LED.
+
+9. Casos de teste integrados
+Caso	Potenciômetro	Temperatura	Botão	Resp. esperada	Resultado
+T1	200	25°C	Livre	NORMAL; LED OFF	Aprovado
+T2	500	25°C	Livre	ATENÇÃO; LED OFF	Aprovado
+T3	800	25°C	Livre	ALARME; LED OFF	Aprovado
+T4	200	35°C	Livre	ATENÇÃO; LED OFF	Aprovado
+T5	200	45°C	Livre	ALARME; LED OFF	Aprovado
+T6	200	25°C	Pressionado	NORMAL; LED ON	Aprovado
+T7	200	Inválida	Livre	FALHA DE SENSOR	Aprovado
+
+
+10. Limitações da simulação
+O projeto foi desenvolvido e testado utilizando o simulador Wokwi. Dessa forma, os sensores e componentes são simulados virtualmente e não representam completamente as condições de um circuito físico.
+A temperatura do DHT22 é alterada por meio da simulação e não por uma mudança real de temperatura. Da mesma forma, os valores do potenciômetro são gerados pelo ambiente virtual.
+Apesar dessas limitações, a simulação permite verificar o funcionamento da lógica do programa, as leituras dos sensores, as respostas do LED e as diferentes condições de operação.
+
